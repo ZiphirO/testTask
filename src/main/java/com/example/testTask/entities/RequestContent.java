@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 @Entity
 @AllArgsConstructor
@@ -20,7 +21,8 @@ public class RequestContent {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(columnDefinition = "jsonb")
+    @Type(com.vladmihalcea.hibernate.type.json.JsonType.class)
+    @Column(columnDefinition = "jsonb", nullable = false)
     private JsonNode content;
 
 }

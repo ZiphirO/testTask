@@ -1,7 +1,6 @@
 package com.example.testTask.service;
 
 import com.example.testTask.entities.RegPerson;
-import com.example.testTask.entities.Settings;
 import com.example.testTask.entities.VerifiedName;
 import com.example.testTask.repositories.SettingsRepository;
 import org.springframework.beans.factory.annotation.Autowired;

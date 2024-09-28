@@ -5,10 +5,12 @@ import com.example.testTask.entities.RequestContent;
 import com.example.testTask.entities.VerifiedName;
 import com.example.testTask.repositories.RequestContentRepository;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class RequestParser {
 
     @Autowired
@@ -17,6 +19,7 @@ public class RequestParser {
     private RegPersonService regPersonService;
     @Autowired
     private VerifiedNameService verifiedNameService;
+
 
     public void parseRequest(RequestContent requestContent) {
         JsonNode content = requestContent.getContent();
@@ -28,4 +31,7 @@ public class RequestParser {
                 .middleName(content.get("verifiedName").get("middleName").asText())
                 .lastName(content.get("verifiedName").get("lastName").asText()).build());
     }
+
+
+
 }
