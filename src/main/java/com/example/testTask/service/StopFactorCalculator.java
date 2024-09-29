@@ -13,10 +13,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StopFactorCalculator {
 
-    private final SettingsService SETTINGS_SERVICE;
 
     public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
-//        Double distanceRatioThreshold = SETTINGS_SERVICE.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
         Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPerson.getFirstName(), regPerson.getLastName(), regPerson.getMiddleName());
         List<String> verifiedNameCombinations = getCombinations(verifiedName.getFirstName(), verifiedName.getLastName(), verifiedName.getMiddleName());

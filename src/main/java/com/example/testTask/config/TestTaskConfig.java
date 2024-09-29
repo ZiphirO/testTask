@@ -26,7 +26,6 @@ public class TestTaskConfig {
         };
     }
 
-
     @Bean(name = "cLR1")
     CommandLineRunner commandLineRunner1(RequestContentService requestContentService){
         return (args) -> {
