@@ -13,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StopFactorCalculator {
 
-
     public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
         Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPerson.getFirstName(), regPerson.getLastName(), regPerson.getMiddleName());

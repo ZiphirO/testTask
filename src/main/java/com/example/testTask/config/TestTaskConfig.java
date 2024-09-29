@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class TestTaskConfig {
@@ -27,20 +29,15 @@ public class TestTaskConfig {
     }
 
     @Bean(name = "cLR1")
-    CommandLineRunner commandLineRunner1(RequestContentService requestContentService){
-        return (args) -> {
-            requestContentService.fetchPersonsInfo();
-        };
-    }
-    @Bean(name = "cLR2")
     CommandLineRunner commandLineRunner2(RequestParser requestParser, RequestContentService requestContentService){
         return (args) -> {
-            for (RequestContent content : requestContentService.fetchPersonsInfo()){
+            List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
+            for (RequestContent content : contentList){
                 requestParser.parseRequest(content);
             }
         };
     }
-    @Bean(name = "cLR3")
+    @Bean(name = "cLR2")
     CommandLineRunner commandLineRunner3(RegPersonService regPersonService, VerifiedNameService verifiedNameService,
                                          StopFactorCalculator stopFactorCalculator, SettingsService settingsService){
         return (args) -> {

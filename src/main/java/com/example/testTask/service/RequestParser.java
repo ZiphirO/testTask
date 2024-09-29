@@ -4,15 +4,13 @@ import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.RequestContent;
 import com.example.testTask.entities.VerifiedName;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class RequestParser {
-//src/main/resources/data/persons
-    private final ObjectMapper MAPPER = new ObjectMapper();
+
     private final RegPersonService REG_PERSON_SERVICE;
     private final VerifiedNameService VERIFIED_NAME_SERVICE;
     private final String[] NEW_REG_PERSON = new String[3];
