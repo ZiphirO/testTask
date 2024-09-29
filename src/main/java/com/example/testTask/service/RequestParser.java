@@ -20,26 +20,30 @@ public class RequestParser {
 
     public void parseRequest(RequestContent requestContent) throws NullPointerException {
         JsonNode content = requestContent.getContent();
-        if (content.get("regPerson").hasNonNull("firstName")){
-            NEW_REG_PERSON[0] = content.get("regPerson").get("firstName").asText();
+        JsonNode regPersonNode = content.get("regPerson");
+        JsonNode creditBureauNode = content.get("creditBureau");
+        JsonNode verifiedNameNode = creditBureauNode.get("verified_name");
+
+        if (regPersonNode.has("firstName")){
+            NEW_REG_PERSON[0] = regPersonNode.get("firstName").asText();
         } else NEW_REG_PERSON[0] = null;
-        if (content.get("regPerson").hasNonNull("middleName")){
-            NEW_REG_PERSON[1] = content.get("regPerson").get("middleName").asText();
+        if (regPersonNode.has("middleName")){
+            NEW_REG_PERSON[1] = regPersonNode.get("middleName").asText();
         } else NEW_REG_PERSON[1] = null;
-        if (content.get("regPerson").hasNonNull("lastName")){
-            NEW_REG_PERSON[2] = content.get("regPerson").get("lastName").asText();
+        if (regPersonNode.has("lastName")){
+            NEW_REG_PERSON[2] = regPersonNode.get("lastName").asText();
         } else NEW_REG_PERSON[2] = null;
         REG_PERSON_SERVICE.initRegPerson(RegPerson.builder().firstName(NEW_REG_PERSON[0])
                 .middleName(NEW_REG_PERSON[1]).lastName(NEW_REG_PERSON[2]).build());
 
-        if (content.get("verified_name").hasNonNull("first_name")){
-            NEW_VERIFIED_NAME[0] = content.get("verified_name").get("first_name").asText();
+        if (verifiedNameNode.has("first_name")){
+            NEW_VERIFIED_NAME[0] = verifiedNameNode.get("first_name").asText();
         } else NEW_VERIFIED_NAME[0] = null;
-        if (content.get("verified_name").hasNonNull("other_name")){
-            NEW_VERIFIED_NAME[1] = content.get("verified_name").get("other_name").asText();
+        if (verifiedNameNode.has("other_name")){
+            NEW_VERIFIED_NAME[1] = verifiedNameNode.get("other_name").asText();
         } else NEW_VERIFIED_NAME[1] = null;
-        if (content.get("verified_name").hasNonNull("surname")){
-            NEW_VERIFIED_NAME[2] = content.get("verified_name").get("surname").asText();
+        if (verifiedNameNode.has("surname")){
+            NEW_VERIFIED_NAME[2] = verifiedNameNode.get("surname").asText();
         } else NEW_VERIFIED_NAME[2] = null;
         VERIFIED_NAME_SERVICE.initVerifiedName(VerifiedName.builder().firstName(NEW_VERIFIED_NAME[0])
                 .middleName(NEW_VERIFIED_NAME[1]).lastName(NEW_VERIFIED_NAME[2]).build());

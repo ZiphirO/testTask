@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "verified_name")
 public class VerifiedName {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "verified_name_id_generator")
+    @SequenceGenerator(name = "verified_name_id_generator", sequenceName = "sq_verified_name_id", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
 

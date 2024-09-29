@@ -1,8 +1,8 @@
 package com.example.testTask.service;
 
 import com.example.testTask.entities.RegPerson;
+import com.example.testTask.entities.Settings;
 import com.example.testTask.entities.VerifiedName;
-import com.example.testTask.repositories.SettingsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StopFactorCalculator {
 
-    private final SettingsRepository SETTINGS_REPOSITORY;
+    private final SettingsService SETTINGS_SERVICE;
 
-    public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName){
-        Double distanceRatioThreshold = SETTINGS_REPOSITORY.findAll().get(0).getDistanceRatioThreshold();
+    public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
+//        Double distanceRatioThreshold = SETTINGS_SERVICE.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
+        Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPerson.getFirstName(), regPerson.getLastName(), regPerson.getMiddleName());
         List<String> verifiedNameCombinations = getCombinations(verifiedName.getFirstName(), verifiedName.getLastName(), verifiedName.getMiddleName());
 

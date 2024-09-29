@@ -2,6 +2,7 @@ package com.example.testTask.config;
 
 import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.RequestContent;
+import com.example.testTask.entities.Settings;
 import com.example.testTask.entities.VerifiedName;
 import com.example.testTask.service.*;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +43,12 @@ public class TestTaskConfig {
     }
     @Bean(name = "cLR3")
     CommandLineRunner commandLineRunner3(RegPersonService regPersonService, VerifiedNameService verifiedNameService,
-                                         StopFactorCalculator stopFactorCalculator){
+                                         StopFactorCalculator stopFactorCalculator, SettingsService settingsService){
         return (args) -> {
+           Settings settings = settingsService.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
             for (RegPerson regPerson : regPersonService.getAllRegPersons()){
                 for (VerifiedName verifiedName : verifiedNameService.getAllVerifiedNames()){
-                    stopFactorCalculator.calculateStopFactor(regPerson, verifiedName);
+                    stopFactorCalculator.calculateStopFactor(regPerson, verifiedName, settings);
                 }
             }
         };
