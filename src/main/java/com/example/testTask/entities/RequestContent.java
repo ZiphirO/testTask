@@ -17,12 +17,16 @@ import org.hibernate.annotations.Type;
 public class RequestContent {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "request_content_id_generator")
+    @SequenceGenerator(name = "request_content_id_generator", sequenceName = "sq_request_content_id", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @Type(com.vladmihalcea.hibernate.type.json.JsonType.class)
-    @Column(columnDefinition = "jsonb", nullable = false)
+    @Column(name = "content", columnDefinition = "jsonb", nullable = false)
     private JsonNode content;
 
+    public RequestContent(JsonNode content) {
+        this.content = content;
+    }
 }

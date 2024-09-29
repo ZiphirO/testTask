@@ -1,15 +1,15 @@
 package com.example.testTask.config;
 
+import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.RequestContent;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.testTask.entities.VerifiedName;
+import com.example.testTask.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.io.File;
-import java.io.IOException;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,24 +26,29 @@ public class TestTaskConfig {
     }
 
 
-//    @Bean
-//    CommandLineRunner commandLineRunner(RequestContentRepository requestContentRepository){
-//        return (args) -> {
-//            requestContentRepository.save(p1);
-//            requestContentRepository.save(p2);
-//            requestContentRepository.save(p1);
-//
-//
-//        };
-//    }
-//    @Bean
-//    CommandLineRunner commandLineRunner(RequestContentRepository requestContentRepository,
-//                                        RequestParser requestParser){
-//        return (args) -> {
-//            for (RequestContent content : requestContentRepository.findAll()){
-//                requestParser.parseRequest(content);
-//            }
-//
-//        };
-//    }
+    @Bean(name = "cLR1")
+    CommandLineRunner commandLineRunner1(RequestContentService requestContentService){
+        return (args) -> {
+            requestContentService.fetchPersonsInfo();
+        };
+    }
+    @Bean(name = "cLR2")
+    CommandLineRunner commandLineRunner2(RequestParser requestParser, RequestContentService requestContentService){
+        return (args) -> {
+            for (RequestContent content : requestContentService.fetchPersonsInfo()){
+                requestParser.parseRequest(content);
+            }
+        };
+    }
+    @Bean(name = "cLR3")
+    CommandLineRunner commandLineRunner3(RegPersonService regPersonService, VerifiedNameService verifiedNameService,
+                                         StopFactorCalculator stopFactorCalculator){
+        return (args) -> {
+            for (RegPerson regPerson : regPersonService.getAllRegPersons()){
+                for (VerifiedName verifiedName : verifiedNameService.getAllVerifiedNames()){
+                    stopFactorCalculator.calculateStopFactor(regPerson, verifiedName);
+                }
+            }
+        };
+    }
 }

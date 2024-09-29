@@ -5,6 +5,8 @@ import com.example.testTask.repositories.RegPersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RegPersonService {
 
@@ -13,5 +15,9 @@ public class RegPersonService {
 
     public RegPerson initRegPerson(RegPerson regPerson){
         return regPersonRepository.save(regPerson);
+    }
+
+    public List<RegPerson> getAllRegPersons(){
+        return regPersonRepository.findAll();
     }
 }
