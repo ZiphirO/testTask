@@ -11,13 +11,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VerifiedNameService {
 
-    private final VerifiedNameRepository verifiedNameRepository;
+    private final VerifiedNameRepository VERIFIED_NAME_SERVICE;
 
     public VerifiedName initVerifiedName(VerifiedName verifiedName){
-        return verifiedNameRepository.save(verifiedName);
+        return VERIFIED_NAME_SERVICE.save(verifiedName);
     }
 
     public List<VerifiedName> getAllVerifiedNames(){
-        return verifiedNameRepository.findAll();
+        return VERIFIED_NAME_SERVICE.findAll();
     }
 }

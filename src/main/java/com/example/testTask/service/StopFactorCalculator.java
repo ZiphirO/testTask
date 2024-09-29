@@ -3,20 +3,20 @@ package com.example.testTask.service;
 import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.VerifiedName;
 import com.example.testTask.repositories.SettingsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class StopFactorCalculator {
 
-    @Autowired
-    private SettingsRepository settingsRepository;
+    private final SettingsRepository SETTINGS_REPOSITORY;
 
     public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName){
-        Double distanceRatioThreshold = settingsRepository.findAll().get(0).getDistanceRatioThreshold();
+        Double distanceRatioThreshold = SETTINGS_REPOSITORY.findAll().get(0).getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPerson.getFirstName(), regPerson.getLastName(), regPerson.getMiddleName());
         List<String> verifiedNameCombinations = getCombinations(verifiedName.getFirstName(), verifiedName.getLastName(), verifiedName.getMiddleName());
 
@@ -65,8 +65,6 @@ public class StopFactorCalculator {
                 );
             }
         }
-
         return Di[Di.length - 1];
     }
-
 }
