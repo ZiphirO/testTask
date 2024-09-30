@@ -12,15 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VerifiedNameServiceImpl implements VerifiedNameService {
 
-    private final VerifiedNameRepository VERIFIED_NAME_SERVICE;
+    private final VerifiedNameRepository verifiedNameRepository;
 
     @Override
     public VerifiedName initVerifiedName(VerifiedName verifiedName){
-        return VERIFIED_NAME_SERVICE.save(verifiedName);
+        return verifiedNameRepository.save(verifiedName);
     }
 
     @Override
     public List<VerifiedName> getAllVerifiedNames(){
-        return VERIFIED_NAME_SERVICE.findAll();
+        return verifiedNameRepository.findAll();
     }
 }

@@ -12,15 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RegPersonServiceImpl implements RegPersonService {
 
-    private final RegPersonRepository REG_PERSON_REPOSITORY;
+    private final RegPersonRepository regPersonRepository;
 
     @Override
     public RegPerson initRegPerson(RegPerson regPerson){
-        return REG_PERSON_REPOSITORY.save(regPerson);
+        return regPersonRepository.save(regPerson);
     }
 
     @Override
     public List<RegPerson> getAllRegPersons(){
-        return REG_PERSON_REPOSITORY.findAll();
+        return regPersonRepository.findAll();
     }
 }

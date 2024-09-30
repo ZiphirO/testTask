@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RequestParserImpl implements RequestParserService {
 
-    private final RegPersonServiceImpl REG_PERSON_SERVICE;
-    private final VerifiedNameServiceImpl VERIFIED_NAME_SERVICE;
-    private final String[] NEW_REG_PERSON = new String[3];
-    private final String[] NEW_VERIFIED_NAME = new String[3];
+    private final RegPersonServiceImpl regPersonService;
+    private final VerifiedNameServiceImpl verifiedNameService;
+    private final String[] newRegPerson = new String[3];
+    private final String[] newVerifiedName = new String[3];
 
     @Override
     public void parseRequest(RequestContent requestContent) throws NullPointerException {
@@ -25,27 +25,27 @@ public class RequestParserImpl implements RequestParserService {
         JsonNode verifiedNameNode = creditBureauNode.get("verified_name");
 
         if (regPersonNode.has("firstName")){
-            NEW_REG_PERSON[0] = regPersonNode.get("firstName").asText();
-        } else NEW_REG_PERSON[0] = null;
+            newRegPerson[0] = regPersonNode.get("firstName").asText();
+        } else newRegPerson[0] = null;
         if (regPersonNode.has("middleName")){
-            NEW_REG_PERSON[1] = regPersonNode.get("middleName").asText();
-        } else NEW_REG_PERSON[1] = null;
+            newRegPerson[1] = regPersonNode.get("middleName").asText();
+        } else newRegPerson[1] = null;
         if (regPersonNode.has("lastName")){
-            NEW_REG_PERSON[2] = regPersonNode.get("lastName").asText();
-        } else NEW_REG_PERSON[2] = null;
-        REG_PERSON_SERVICE.initRegPerson(RegPerson.builder().firstName(NEW_REG_PERSON[0])
-                .middleName(NEW_REG_PERSON[1]).lastName(NEW_REG_PERSON[2]).build());
+            newRegPerson[2] = regPersonNode.get("lastName").asText();
+        } else newRegPerson[2] = null;
+        regPersonService.initRegPerson(RegPerson.builder().firstName(newRegPerson[0])
+                .middleName(newRegPerson[1]).lastName(newRegPerson[2]).build());
 
         if (verifiedNameNode.has("first_name")){
-            NEW_VERIFIED_NAME[0] = verifiedNameNode.get("first_name").asText();
-        } else NEW_VERIFIED_NAME[0] = null;
+            newVerifiedName[0] = verifiedNameNode.get("first_name").asText();
+        } else newVerifiedName[0] = null;
         if (verifiedNameNode.has("other_name")){
-            NEW_VERIFIED_NAME[1] = verifiedNameNode.get("other_name").asText();
-        } else NEW_VERIFIED_NAME[1] = null;
+            newVerifiedName[1] = verifiedNameNode.get("other_name").asText();
+        } else newVerifiedName[1] = null;
         if (verifiedNameNode.has("surname")){
-            NEW_VERIFIED_NAME[2] = verifiedNameNode.get("surname").asText();
-        } else NEW_VERIFIED_NAME[2] = null;
-        VERIFIED_NAME_SERVICE.initVerifiedName(VerifiedName.builder().firstName(NEW_VERIFIED_NAME[0])
-                .middleName(NEW_VERIFIED_NAME[1]).lastName(NEW_VERIFIED_NAME[2]).build());
+            newVerifiedName[2] = verifiedNameNode.get("surname").asText();
+        } else newVerifiedName[2] = null;
+        verifiedNameService.initVerifiedName(VerifiedName.builder().firstName(newVerifiedName[0])
+                .middleName(newVerifiedName[1]).lastName(newVerifiedName[2]).build());
     }
 }

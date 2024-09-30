@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SettingsServiceImpl implements SettingsService {
 
-    private final SettingsRepository SETTINGS_REPOSITORY;
+    private final SettingsRepository settingsRepository;
 
     @Override
     public Settings initSettings (Settings settings){
-        return SETTINGS_REPOSITORY.save(settings);
+        return settingsRepository.save(settings);
     }
 }

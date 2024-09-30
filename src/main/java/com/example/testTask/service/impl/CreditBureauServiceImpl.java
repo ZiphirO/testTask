@@ -18,29 +18,26 @@ import java.util.List;
 public class CreditBureauServiceImpl implements CreditBureauService {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private final CreditBureauRepository CREDIT_BUREAU_REPOSITORY;
-    private final File PERSON_DIR = new File("src/main/resources/data/persons");
+    private final CreditBureauRepository creditBureauRepository;
+    private final File personDir = new File("src/main/resources/data/persons");
 
     @Override
     public CreditBureau createCreditBureau(CreditBureau creditBureau){
-        return CREDIT_BUREAU_REPOSITORY.save(creditBureau);
+        return creditBureauRepository.save(creditBureau);
     }
 
     @Override
     public List<CreditBureau> fetchCreditBureaus() throws IOException {
-        File[] personList = PERSON_DIR.listFiles();
+        File[] personList = personDir.listFiles();
         List<CreditBureau> creditBureauListList = new ArrayList<>();
         assert personList != null;
         for (File file : personList){
             if (file.isFile()){
                 JsonNode requestContent = MAPPER.readTree(file);
                 JsonNode creditBureau = requestContent.get("creditBureau");
-//                MAPPER.writerWithDefaultPrettyPrinter()
-//                        .writeValue(new File("src/main/resources/data/temporaryData/credit_bureau.json"),
-//                                creditBureau);
                 creditBureauListList.add(new CreditBureau(creditBureau));
             }
         }
-        return CREDIT_BUREAU_REPOSITORY.saveAll(creditBureauListList);
+        return creditBureauRepository.saveAll(creditBureauListList);
     }
 }

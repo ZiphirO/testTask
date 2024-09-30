@@ -31,7 +31,7 @@ public class TestTaskConfig {
                                          CreditBureauServiceImpl creditBureauService){
         return (args) -> {
             List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
-            List<CreditBureau> creditBureauList = creditBureauService.fetchCreditBureaus();
+            creditBureauService.fetchCreditBureaus();
             for (RequestContent content : contentList){
                 requestParser.parseRequest(content);
             }
