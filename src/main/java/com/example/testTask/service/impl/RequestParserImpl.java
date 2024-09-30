@@ -1,21 +1,23 @@
-package com.example.testTask.service;
+package com.example.testTask.service.impl;
 
 import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.RequestContent;
 import com.example.testTask.entities.VerifiedName;
+import com.example.testTask.service.RequestParserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RequestParser {
+public class RequestParserImpl implements RequestParserService {
 
-    private final RegPersonService REG_PERSON_SERVICE;
-    private final VerifiedNameService VERIFIED_NAME_SERVICE;
+    private final RegPersonServiceImpl REG_PERSON_SERVICE;
+    private final VerifiedNameServiceImpl VERIFIED_NAME_SERVICE;
     private final String[] NEW_REG_PERSON = new String[3];
     private final String[] NEW_VERIFIED_NAME = new String[3];
 
+    @Override
     public void parseRequest(RequestContent requestContent) throws NullPointerException {
         JsonNode content = requestContent.getContent();
         JsonNode regPersonNode = content.get("regPerson");

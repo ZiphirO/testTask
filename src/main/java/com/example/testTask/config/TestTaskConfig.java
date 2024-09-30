@@ -1,10 +1,7 @@
 package com.example.testTask.config;
 
-import com.example.testTask.entities.RegPerson;
-import com.example.testTask.entities.RequestContent;
-import com.example.testTask.entities.Settings;
-import com.example.testTask.entities.VerifiedName;
-import com.example.testTask.service.*;
+import com.example.testTask.entities.*;
+import com.example.testTask.service.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -29,17 +26,19 @@ public class TestTaskConfig {
     }
 
     @Bean(name = "cLR1")
-    CommandLineRunner commandLineRunner2(RequestParser requestParser, RequestContentService requestContentService){
+    CommandLineRunner commandLineRunner2(RequestParserImpl requestParser, RequestContentServiceImpl requestContentService,
+                                         CreditBureauServiceImpl creditBureauService){
         return (args) -> {
             List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
+            List<CreditBureau> creditBureauList = creditBureauService.fetchCreditBureaus();
             for (RequestContent content : contentList){
                 requestParser.parseRequest(content);
             }
         };
     }
     @Bean(name = "cLR2")
-    CommandLineRunner commandLineRunner3(RegPersonService regPersonService, VerifiedNameService verifiedNameService,
-                                         StopFactorCalculator stopFactorCalculator, SettingsService settingsService){
+    CommandLineRunner commandLineRunner3(RegPersonServiceImpl regPersonService, VerifiedNameServiceImpl verifiedNameService,
+                                         StopFactorCalculatorImpl stopFactorCalculator, SettingsServiceImpl settingsService){
         return (args) -> {
            Settings settings = settingsService.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
             for (RegPerson regPerson : regPersonService.getAllRegPersons()){

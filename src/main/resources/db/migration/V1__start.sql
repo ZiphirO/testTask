@@ -25,3 +25,9 @@ CREATE TABLE verified_name (
     middle_name VARCHAR(255)
 );
 CREATE SEQUENCE sq_verified_name_id START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE credit_bureau (
+    id bigint PRIMARY KEY,
+    content json NOT NULL
+);
+CREATE SEQUENCE sq_credit_bureau_id START WITH 1 INCREMENT BY 1;
