@@ -1,15 +1,13 @@
 package com.example.testTask.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 @Table(name = "verified_name")
 public class VerifiedName {
@@ -20,6 +18,10 @@ public class VerifiedName {
     private Long id;
 
     private String firstName;
-    private String lastName;
-    private String middleName;
+    private String otherName;
+    private String surname;
+
+    @OneToOne
+    @JoinColumn(name = "reg_person_id")
+    private RegPerson regPerson;
 }

@@ -2,23 +2,29 @@ package com.example.testTask.service.impl;
 
 import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.Settings;
+import com.example.testTask.entities.StopFactor;
 import com.example.testTask.entities.VerifiedName;
 import com.example.testTask.service.StopFactorCalculator;
-import lombok.RequiredArgsConstructor;
+import com.example.testTask.service.StopFactorService;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class StopFactorCalculatorImpl implements StopFactorCalculator {
+
+    @Autowired
+    private StopFactorService stopFactorService;
 
     @Override
     public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
         Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPerson.getFirstName(), regPerson.getLastName(), regPerson.getMiddleName());
-        List<String> verifiedNameCombinations = getCombinations(verifiedName.getFirstName(), verifiedName.getLastName(), verifiedName.getMiddleName());
+        List<String> verifiedNameCombinations = getCombinations(verifiedName.getFirstName(), verifiedName.getOtherName(), verifiedName.getSurname());
 
         int maxDistance = 0;
         for (String regPersonCombination : regPersonCombinations) {
@@ -29,7 +35,7 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
                 }
             }
         }
-
+        stopFactorService.initStopFactor(new StopFactor(maxDistance < distanceRatioThreshold, regPerson));
         return maxDistance < distanceRatioThreshold;
     }
 

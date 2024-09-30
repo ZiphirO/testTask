@@ -1,17 +1,15 @@
 package com.example.testTask.entities;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 @Table(name = "credit_bureau")
 public class CreditBureau {
@@ -22,11 +20,24 @@ public class CreditBureau {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Type(com.vladmihalcea.hibernate.type.json.JsonType.class)
-    @Column(name = "content", columnDefinition = "jsonb", nullable = false)
-    private JsonNode content;
+    private String accountNumber;
+    private String accountStatus;
+    private BigDecimal currentBalance;
+    private String dateOpened;
+    private Integer daysInArrears;
+    private String delinquencyCode;
+    private Integer highestDaysInArrears;
+    private Boolean isYourAccount;
+    private BigDecimal lastPaymentAmount;
+    private String lastPaymentDate;
+    private String loadedAt;
+    private BigDecimal originalAmount;
+    private BigDecimal overdueBalance;
+    private String overdueDate;
+    private Integer productTypeId;
 
-    public CreditBureau(JsonNode content) {
-        this.content = content;
-    }
+    @ManyToOne
+    @JoinColumn(name = "reg_person_id")
+    private RegPerson regPerson;
 }
+

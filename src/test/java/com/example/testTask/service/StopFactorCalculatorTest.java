@@ -36,7 +36,7 @@ class StopFactorCalculatorTest {
     void testCalculateStopFactor() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
         RegPerson regPerson = new RegPerson(1L, "John", "Doe", "A");
-        VerifiedName verifiedName = new VerifiedName(2L,"John", "Doe", "B");
+        VerifiedName verifiedName = new VerifiedName(2L,"John", "Doe", "B", regPerson);
         Settings settings = new Settings();
         settings.setDistanceRatioThreshold(1.0);
 
