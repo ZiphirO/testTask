@@ -1,6 +1,7 @@
 package com.example.testTask.config;
 
 import com.example.testTask.entities.*;
+import com.example.testTask.service.*;
 import com.example.testTask.service.impl.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -26,7 +27,7 @@ public class TestTaskConfig {
     }
 
     @Bean(name = "cLR1")
-    CommandLineRunner commandLineRunner2(RequestParserImpl requestParser, RequestContentServiceImpl requestContentService,
+    CommandLineRunner commandLineRunner2(RequestParserService requestParser, RequestContentService requestContentService,
                                          CreditBureauServiceImpl creditBureauService){
         return (args) -> {
             List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
@@ -37,8 +38,8 @@ public class TestTaskConfig {
         };
     }
     @Bean(name = "cLR2")
-    CommandLineRunner commandLineRunner3(RegPersonServiceImpl regPersonService, VerifiedNameServiceImpl verifiedNameService,
-                                         StopFactorCalculatorImpl stopFactorCalculator, SettingsServiceImpl settingsService){
+    CommandLineRunner commandLineRunner3(RegPersonService regPersonService, VerifiedNameService verifiedNameService,
+                                         StopFactorCalculator stopFactorCalculator, SettingsService settingsService){
         return (args) -> {
            Settings settings = settingsService.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
             for (RegPerson regPerson : regPersonService.getAllRegPersons()){
