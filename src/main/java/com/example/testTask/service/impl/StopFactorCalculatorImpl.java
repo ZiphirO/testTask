@@ -20,14 +20,14 @@ import java.util.List;
 public class StopFactorCalculatorImpl implements StopFactorCalculator {
 
     @Autowired
-    private StopFactorService stopFactorService;
+    private  StopFactorService stopFactorService;
     @Autowired
-    private RegPersonService regPersonService;
+    private  RegPersonService regPersonService;
     @Autowired
-    private VerifiedNameService verifiedNameService;
+    private  VerifiedNameService verifiedNameService;
 
     @Override
-    public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
+    public  boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
         Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPersonService.getRegPersonFields(regPerson));
         List<String> verifiedNameCombinations = getCombinations(verifiedNameService.getVerifiedNameFields(verifiedName));
@@ -47,7 +47,7 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
     }
 
     @Override
-    public List<String> getCombinations(List<String> names) {
+    public  List<String> getCombinations(List<String> names) {
         List<String> combinations = new ArrayList<>();
         for (int i = 0; i < names.size(); i++) {
             for (int j = i + 1; j < names.size(); j++) {
@@ -57,13 +57,9 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
         }
         return combinations;
     }
-
-    private static int min(int n1, int n2, int n3) {
-        return Math.min(Math.min(n1, n2), n3);
-    }
-
+    
     @Override
-    public int levenshteinDistance(String str1, String str2) {
+    public  int levenshteinDistance(String str1, String str2) {
         int len1 = str1.length();
         int len2 = str2.length();
 
