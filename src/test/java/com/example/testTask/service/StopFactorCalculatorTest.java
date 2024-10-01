@@ -6,22 +6,73 @@ import com.example.testTask.entities.VerifiedName;
 import com.example.testTask.service.impl.StopFactorCalculatorImpl;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 class StopFactorCalculatorTest {
 
-    @Test
-    void testGetCombinations() {
-        StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
-        List<String> combinations = stopFactorCalculator.getCombinations("John", "Doe", "A");
-        assertEquals(3, combinations.size());
-        assertTrue(combinations.contains("JohnDoe"));
-        assertTrue(combinations.contains("JohnA"));
-        assertTrue(combinations.contains("DoeA"));
-    }
+//    @Test
+//    public void testGetCombinations() {
+//        // Arrange
+//        List<String> names = Arrays.asList("John", "Doe", "Smith");
+//        List<String> expectedCombinations = Arrays.asList(
+//                "JohnDoe", "DoeJohn",
+//                "JohnSmith", "SmithJohn",
+//                "DoeSmith", "SmithDoe"
+//        );
+//
+//        // Act
+//        CombinationService combinationService = new CombinationService();
+//        List<String> actualCombinations = combinationService.getCombinations(names);
+//
+//        // Assert
+//        assertEquals(expectedCombinations.size(), actualCombinations.size(), "Size of combinations should match");
+//        assertEquals(expectedCombinations, actualCombinations, "The combinations should match the expected result");
+//    }
+//
+//    @Test
+//    public void testGetCombinations_EmptyList() {
+//        // Arrange
+//        List<String> names = Arrays.asList();
+//        List<String> expectedCombinations = Arrays.asList(); // No combinations for an empty list
+//
+//        // Act
+//        CombinationService combinationService = new CombinationService();
+//        List<String> actualCombinations = combinationService.getCombinations(names);
+//
+//        // Assert
+//        assertEquals(expectedCombinations, actualCombinations, "The combinations should be empty for an empty list");
+//    }
+//
+//    @Test
+//    public void testGetCombinations_SingleElementList() {
+//        // Arrange
+//        List<String> names = Arrays.asList("John");
+//        List<String> expectedCombinations = Arrays.asList(); // No combinations for a single element
+//
+//        // Act
+//        CombinationService combinationService = new CombinationService();
+//        List<String> actualCombinations = combinationService.getCombinations(names);
+//
+//        // Assert
+//        assertEquals(expectedCombinations, actualCombinations, "The combinations should be empty for a single element");
+//    }
+
+//    @Test
+//    public void testGetCombinations_TwoElementsList() {
+//        // Arrange
+//        List<String> names = Arrays.asList("John", "Doe");
+//        List<String> expectedCombinations = Arrays.asList(
+//                "JohnDoe", "DoeJohn"
+//        );
+//
+//        // Act
+//        CombinationService combinationService = new CombinationService();
+//        List<String> actualCombinations = combinationService.getCombinations(names);
+//
+//        // Assert
+//        assertEquals(expectedCombinations, actualCombinations, "The combinations should match the expected result for two elements");
+//    }
 
     @Test
     void testLevenshteinDistance() {

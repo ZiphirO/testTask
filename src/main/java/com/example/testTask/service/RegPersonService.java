@@ -8,4 +8,5 @@ public interface RegPersonService {
 
     RegPerson initRegPerson(RegPerson regPerson);
     List<RegPerson> getAllRegPersons();
+    List<String> getRegPersonFields(RegPerson regPerson);
 }
