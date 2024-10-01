@@ -11,21 +11,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class StopFactorCalculatorTest {
 
     @Test
     public void testGetCombinations() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
-        // Arrange
+
         List<String> names = List.of("John", "Doe", "Smith");
         List<String> expectedCombinations = List.of(
                 "JohnDoe", "DoeJohn",
                 "JohnSmith", "SmithJohn",
                 "DoeSmith", "SmithDoe"
         );
-
         Assertions.assertNotEquals(stopFactorCalculator.getCombinations(names), stopFactorCalculator.getCombinations(expectedCombinations));
         Assertions.assertEquals(stopFactorCalculator.getCombinations(names), stopFactorCalculator.getCombinations(names));
     }
@@ -33,9 +33,9 @@ class StopFactorCalculatorTest {
     @Test
     public void testGetCombinations_EmptyList() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
-        // Arrange
+
         List<String> names = new ArrayList<>();
-        List<String> expectedCombinations = new ArrayList<>(); // No combinations for an empty list
+        List<String> expectedCombinations = new ArrayList<>();
 
         Assertions.assertEquals(stopFactorCalculator.getCombinations(names),
                 stopFactorCalculator.getCombinations(expectedCombinations));
@@ -44,9 +44,9 @@ class StopFactorCalculatorTest {
     @Test
     public void testGetCombinations_SingleElementList() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
-        // Arrange
+
         List<String> names = List.of("John");
-        List<String> expectedCombinations = new ArrayList<>(); // No combinations for a single element
+        List<String> expectedCombinations = new ArrayList<>();
 
         Assertions.assertEquals(stopFactorCalculator.getCombinations(names),
                 stopFactorCalculator.getCombinations(expectedCombinations));
@@ -55,7 +55,7 @@ class StopFactorCalculatorTest {
     @Test
     public void testGetCombinations_TwoElementsList() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
-        // Arrange
+
         List<String> names = Arrays.asList("John", "Doe");
         List<String> expectedCombinations = Arrays.asList(
                 "JohnDoe", "DoeJohn"
@@ -66,12 +66,37 @@ class StopFactorCalculatorTest {
     }
 
     @Test
-    void testLevenshteinDistance() {
+    public void testEmptyStrings() {
+        StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
+        assertEquals(0, stopFactorCalculator.levenshteinDistance("", ""));
+    }
+
+    @Test
+    public void testOneEmptyString() {
+        StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
+        assertEquals(5, stopFactorCalculator.levenshteinDistance("hello", ""));
+        assertEquals(5, stopFactorCalculator.levenshteinDistance("", "world"));
+    }
+
+    @Test
+    public void testSameStrings() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
         assertEquals(0, stopFactorCalculator.levenshteinDistance("test", "test"));
-        assertEquals(1, stopFactorCalculator.levenshteinDistance("test", "tent"));
-        assertEquals(4, stopFactorCalculator.levenshteinDistance("test", "tstt"));
+    }
+
+    @Test
+    public void testDifferentStrings() {
+        StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
         assertEquals(3, stopFactorCalculator.levenshteinDistance("kitten", "sitting"));
+        assertEquals(1, stopFactorCalculator.levenshteinDistance("flaw", "flaws"));
+        assertEquals(4, stopFactorCalculator.levenshteinDistance("gumbo", "gambol"));
+    }
+
+    @Test
+    public void testSingleCharacterStrings() {
+        StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
+        assertEquals(1, stopFactorCalculator.levenshteinDistance("a", "b"));
+        assertEquals(1, stopFactorCalculator.levenshteinDistance("a", ""));
     }
 
     @Test
@@ -80,13 +105,11 @@ class StopFactorCalculatorTest {
         RegPerson regPerson = new RegPerson(1L, "John", "Doe", "A");
         VerifiedName verifiedName = new VerifiedName(2L,"John", "Doe", "B", regPerson);
         Settings settings = new Settings();
-        settings.setDistanceRatioThreshold(1.0);
+        settings.setDistanceRatioThreshold(4.0);
 
-        boolean result = stopFactorCalculator.calculateStopFactor(regPerson, verifiedName, settings);
-        assertTrue(result);
+        assertTrue(stopFactorCalculator.calculateStopFactor(regPerson, verifiedName, settings));
 
         settings.setDistanceRatioThreshold(0.5);
-        result = stopFactorCalculator.calculateStopFactor(regPerson, verifiedName, settings);
-        assertFalse(result);
+        Assertions.assertFalse(stopFactorCalculator.calculateStopFactor(regPerson, verifiedName, settings));
     }
 }
