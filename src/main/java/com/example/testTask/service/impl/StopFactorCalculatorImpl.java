@@ -35,7 +35,10 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
                 }
             }
         }
-        stopFactorService.initStopFactor(new StopFactor(maxDistance < distanceRatioThreshold, regPerson));
+        StopFactor stopFactor = new StopFactor();
+        stopFactor.setPersonStopFactor(maxDistance < distanceRatioThreshold);
+        stopFactor.setRegPerson(regPerson);
+        stopFactorService.initStopFactor(stopFactor);
         return maxDistance < distanceRatioThreshold;
     }
 

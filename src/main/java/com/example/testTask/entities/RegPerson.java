@@ -20,4 +20,6 @@ public class RegPerson {
     private String firstName;
     private String lastName;
     private String middleName;
+
+
 }

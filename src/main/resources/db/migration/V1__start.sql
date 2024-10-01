@@ -24,7 +24,7 @@ CREATE TABLE verified_name (
     other_name VARCHAR(255),
     surname VARCHAR(255) ,
     reg_person_id BIGINT ,
-    CONSTRAINT fk_verified_person FOREIGN KEY (reg_person_id) REFERENCES reg_person(id)
+    CONSTRAINT fk_reg_person_id FOREIGN KEY (reg_person_id) REFERENCES reg_person(id)
 );
 CREATE SEQUENCE sq_verified_name_id START WITH 1 INCREMENT BY 1;
 
@@ -46,13 +46,14 @@ CREATE TABLE credit_bureau (
     overdue_date VARCHAR(255),
     product_type_id INT,
     reg_person_id BIGINT ,
-    CONSTRAINT fk_reg_person FOREIGN KEY (reg_person_id) REFERENCES reg_person(id)
+    CONSTRAINT fk_reg_person_id FOREIGN KEY (reg_person_id) REFERENCES reg_person(id)
 );
 CREATE SEQUENCE sq_credit_bureau_id START WITH 1 INCREMENT BY 1;
 
 CREATE TABLE stop_factor (
     id bigint PRIMARY KEY,
     person_stop_factor BOOLEAN,
-    CONSTRAINT fk_reg_person FOREIGN KEY (reg_person_id) REFERENCES reg_person(id)
+    reg_person_id BIGINT ,
+    CONSTRAINT fk_reg_person_id FOREIGN KEY (reg_person_id) REFERENCES reg_person(id)
 );
-CREATE SEQUENCE sq_credit_bureau_id START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE sq_stop_factor_id START WITH 1 INCREMENT BY 1;

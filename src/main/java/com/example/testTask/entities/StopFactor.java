@@ -24,8 +24,4 @@ public class StopFactor {
     @JoinColumn(name = "reg_person_id")
     private RegPerson regPerson;
 
-    public StopFactor(boolean personStopFactor, RegPerson regPerson) {
-        this.personStopFactor = personStopFactor;
-        this.regPerson = regPerson;
-    }
 }
