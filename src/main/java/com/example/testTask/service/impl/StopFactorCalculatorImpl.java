@@ -36,16 +36,14 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
         for (String regPersonCombination : regPersonCombinations) {
             for (String verifiedNameCombination : verifiedNameCombinations) {
                 int distance = levenshteinDistance(regPersonCombination, verifiedNameCombination);
-                if (distance > maxDistance) {
-                    maxDistance = distance;
-                }
+                maxDistance = Math.max(maxDistance, distance);
             }
         }
         StopFactor stopFactor = new StopFactor();
-        stopFactor.setPersonStopFactor(maxDistance < distanceRatioThreshold);
+        stopFactor.setPersonStopFactor(Double.valueOf((double) maxDistance).equals(distanceRatioThreshold));
         stopFactor.setRegPerson(regPerson);
         stopFactorService.initStopFactor(stopFactor);
-        return maxDistance < distanceRatioThreshold;
+        return Double.valueOf((double) maxDistance).equals(distanceRatioThreshold);
     }
 
     @Override

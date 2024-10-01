@@ -17,7 +17,7 @@ public class StopFactor {
     @SequenceGenerator(name = "stop_factor_id_generator", sequenceName = "sq_stop_factor_id", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
-
+    @Column(name = "person_stop_factor", nullable = false)
     private boolean personStopFactor;
 
     @OneToOne
