@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   service-db:
     image: postgres:latest
@@ -7,6 +9,9 @@ services:
     ports:
       - "5444:5432"
     volumes:
-      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/01_create_db.sql # Убедитесь, что путь ведет к файлу
       - db-data:/var/lib/postgresql/data
     restart: unless-stopped
+
+volumes:
+  db-data:
