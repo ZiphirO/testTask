@@ -40,10 +40,12 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
             }
         }
         StopFactor stopFactor = new StopFactor();
-        stopFactor.setPersonStopFactor(Double.valueOf((double) maxDistance).equals(distanceRatioThreshold));
+        boolean personStopFactor = Double.compare((double) maxDistance, distanceRatioThreshold) == 0;
+        stopFactor.setPersonStopFactor(personStopFactor);
         stopFactor.setRegPerson(regPerson);
         stopFactorService.initStopFactor(stopFactor);
-        return Double.valueOf((double) maxDistance).equals(distanceRatioThreshold);
+
+        return personStopFactor;
     }
 
     @Override

@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:17.0
+    restart: always
+    ports:
+      - "5444:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+  test-task:
+    image: test-task:latest
+    build:
+      context: .
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: always
+    ports:
+      - "9111:9111"
+    environment:
+      POSTGRES_HOST: postgres:5432
+      POSTGRES_PASSWORD: 123
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:9111/ || exit 1
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 5
+    depends_on:
+      - postgres
+volumes:
+  postgres_data:

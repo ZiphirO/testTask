@@ -27,13 +27,15 @@ public class TestTaskConfig {
     }
 
     @Bean(name = "cLR1")
-    CommandLineRunner commandLineRunner2(RequestParserService requestParser, RequestContentService requestContentService,
-                                         CreditBureauServiceImpl creditBureauService){
+    CommandLineRunner commandLineRunner2(RegPersonParser regPersonParser, VerifiedNameParser verifiedNameParser,
+                                            CreditBureauParser creditBureauParser, RequestContentService requestContentService){
         return (args) -> {
             List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
             //creditBureauService.fetchCreditBureaus();
             for (RequestContent content : contentList){
-                requestParser.parseRequest(content);
+                RegPerson regPerson = regPersonParser.regPersonParse(content);
+                verifiedNameParser.verifiedNameParse(content, regPerson);
+                creditBureauParser.creditBureauParse(content, regPerson);
             }
         };
     }
