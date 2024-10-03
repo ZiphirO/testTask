@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:17.0
-    restart: always
+    restart: "no"
     ports:
       - "5444:5432"
     volumes:
@@ -22,7 +22,7 @@ services:
       context: .
       args:
         DOCKER_BUILDKIT: 1
-    restart: always
+    restart: "no"
     ports:
       - "9111:9111"
     environment:
