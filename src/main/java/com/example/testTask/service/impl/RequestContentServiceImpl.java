@@ -8,8 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,8 +26,28 @@ public class RequestContentServiceImpl implements RequestContentService {
             return requestContentRepository.save(requestContent);
     }
 
+    // реализация метода для работы в файловой системе контейнера в Docker
     @Override
     public List<RequestContent> fetchPersonsInfo() throws IOException{
+        List<RequestContent> pList = new ArrayList<>();
+        URL resource = getClass().getClassLoader().getResource("data/persons");
+
+        if (resource != null) {
+            File personDir = new File(resource.getFile());
+            File[] personList = personDir.listFiles();
+
+            assert personList != null;
+            for (File file : personList) {
+                if (file.isFile()) {
+                    pList.add(new RequestContent(MAPPER.readTree(file)));
+                }
+            }
+        }
+        return requestContentRepository.saveAll(pList);
+    }
+
+    // реализация метода для работы в локальной файловой системе
+    public List<RequestContent> fetchPersonsInfoLocal() throws IOException{
         File[] personList = personDir.listFiles();
         List<RequestContent> pList = new ArrayList<>();
         assert personList != null;

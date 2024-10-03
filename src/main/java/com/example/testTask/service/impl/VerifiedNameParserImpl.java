@@ -27,8 +27,8 @@ public class VerifiedNameParserImpl implements VerifiedNameParser {
             verifiedName.setOtherName(verifiedNameNode.get("other_name").asText());
         } else verifiedName.setOtherName(null);
         if (verifiedNameNode.has("surname")){
-            verifiedName.setOtherName(verifiedNameNode.get("surname").asText());
-        } else verifiedName.setOtherName(null);
+            verifiedName.setSurname(verifiedNameNode.get("surname").asText());
+        } else verifiedName.setSurname(null);
         verifiedName.setRegPerson(regPerson);
         verifiedNameService.initVerifiedName(verifiedName);
     }

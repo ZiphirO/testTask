@@ -20,9 +20,11 @@ public class CreditBureauParserImpl implements CreditBureauParser {
     @Override
     public void creditBureauParse(RequestContent requestContent, RegPerson regPerson) {
         JsonNode creditBureauInfoNode = requestContent.getContent().get("creditBureau").get("account_info");
-        CreditBureau creditBureau = new CreditBureau();
+
 
         for (JsonNode accountNode : creditBureauInfoNode) {
+            CreditBureau creditBureau = new CreditBureau();
+
             if (accountNode.has("account_number")){
                 creditBureau.setAccountNumber(accountNode.get("account_number").asText());
             } else creditBureau.setAccountNumber(null);
@@ -68,8 +70,9 @@ public class CreditBureauParserImpl implements CreditBureauParser {
             if (accountNode.has("product_type_id")){
                 creditBureau.setProductTypeId(accountNode.get("product_type_id").asInt());
             } else creditBureau.setProductTypeId(null);
+
+            creditBureau.setRegPerson(regPerson);
+            creditBureauService.initCreditBureau(creditBureau);
         }
-        creditBureau.setRegPerson(regPerson);
-        creditBureauService.initCreditBureau(creditBureau);
     }
 }
