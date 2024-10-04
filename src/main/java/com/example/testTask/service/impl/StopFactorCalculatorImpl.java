@@ -2,52 +2,91 @@ package com.example.testTask.service.impl;
 
 import com.example.testTask.entities.RegPerson;
 import com.example.testTask.entities.Settings;
+import com.example.testTask.entities.StopFactor;
 import com.example.testTask.entities.VerifiedName;
+import com.example.testTask.service.RegPersonService;
 import com.example.testTask.service.StopFactorCalculator;
-import lombok.RequiredArgsConstructor;
+import com.example.testTask.service.StopFactorService;
+import com.example.testTask.service.VerifiedNameService;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class StopFactorCalculatorImpl implements StopFactorCalculator {
 
-    @Override
-    public boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
-        Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
-        List<String> regPersonCombinations = getCombinations(regPerson.getFirstName(), regPerson.getLastName(), regPerson.getMiddleName());
-        List<String> verifiedNameCombinations = getCombinations(verifiedName.getFirstName(), verifiedName.getLastName(), verifiedName.getMiddleName());
+    @Autowired
+    private  StopFactorService stopFactorService;
+    @Autowired
+    private  RegPersonService regPersonService;
+    @Autowired
+    private  VerifiedNameService verifiedNameService;
 
-        int maxDistance = 0;
-        for (String regPersonCombination : regPersonCombinations) {
-            for (String verifiedNameCombination : verifiedNameCombinations) {
-                int distance = levenshteinDistance(regPersonCombination, verifiedNameCombination);
-                if (distance > maxDistance) {
-                    maxDistance = distance;
+    @Override
+    public  boolean calculateStopFactor(RegPerson regPerson, VerifiedName verifiedName, Settings settings){
+        Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
+        List<String> regPersonCombinations = getCombinations(regPersonService.getRegPersonFields(regPerson));
+        List<String> verifiedNameCombinations = getCombinations(verifiedNameService.getVerifiedNameFields(verifiedName));
+        double maxNormalizedDistance = 0.0;
+
+        if (regPersonCombinations.size() > verifiedNameCombinations.size()){
+            for (String regPersonCombination : regPersonCombinations) {
+                for (String verifiedNameCombination : verifiedNameCombinations) {
+                    int distance = levenshteinDistance(regPersonCombination, verifiedNameCombination);
+                    double normalizedDistance = 1 - (double)distance / Math.max(regPersonCombination.length(), verifiedNameCombination.length());
+                    maxNormalizedDistance = Math.max(maxNormalizedDistance, normalizedDistance);
+                }
+            }
+        }else {
+            for (String verifiedNameCombination  : verifiedNameCombinations) {
+                for (String regPersonCombination : regPersonCombinations) {
+                    int distance = levenshteinDistance(verifiedNameCombination, regPersonCombination);
+                    double normalizedDistance = 1 - (double) distance / Math.max(regPersonCombination.length(), verifiedNameCombination.length());
+                    maxNormalizedDistance = Math.max(maxNormalizedDistance, normalizedDistance);
                 }
             }
         }
 
-        return maxDistance < distanceRatioThreshold;
+        StopFactor stopFactor = new StopFactor();
+
+        boolean personStopFactor = maxNormalizedDistance < distanceRatioThreshold;
+        stopFactor.setPersonStopFactor(personStopFactor);
+        stopFactor.setRegPerson(regPerson);
+        stopFactorService.initStopFactor(stopFactor);
+
+        System.out.println(maxNormalizedDistance);
+
+        return personStopFactor;
     }
 
     @Override
-    public List<String> getCombinations(String firstName, String lastName, String middleName) {
+    public  List<String> getCombinations(List<String> names) {
         List<String> combinations = new ArrayList<>();
-        combinations.add(firstName + lastName);
-        combinations.add(firstName + middleName);
-        combinations.add(lastName + middleName);
+        List<String> tpm = new ArrayList<>();
+        for (String name : names){
+            if (name.contains(" ")){
+                String[] splited = name.split(" ");
+                tpm.addAll(Arrays.asList(splited));
+            }else tpm.add(name);
+        }
+        for (int i = 0; i < tpm.size(); i++) {
+            for (int j = i + 1; j < tpm.size(); j++) {
+                combinations.add(tpm.get(i) + tpm.get(j));
+                combinations.add(tpm.get(j) + tpm.get(i));
+            }
+        }
         return combinations;
     }
-
-    private static int min(int n1, int n2, int n3) {
-        return Math.min(Math.min(n1, n2), n3);
-    }
-
+    
     @Override
-    public int levenshteinDistance(String str1, String str2) {
+    public  int levenshteinDistance(String word1, String word2) {
+        String str1 = word1.toUpperCase();
+        String str2 = word2.toUpperCase();
         int[] Di_1 = new int[str2.length() + 1];
         int[] Di = new int[str2.length() + 1];
 
@@ -69,5 +108,8 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
             }
         }
         return Di[Di.length - 1];
+    }
+    private static int min(int n1, int n2, int n3) {
+        return Math.min(Math.min(n1, n2), n3);
     }
 }

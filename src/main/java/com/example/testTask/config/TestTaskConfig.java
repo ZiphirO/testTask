@@ -13,7 +13,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-@RequiredArgsConstructor
 public class TestTaskConfig {
 
     @Bean
@@ -26,22 +25,20 @@ public class TestTaskConfig {
         };
     }
 
-    @Bean(name = "cLR1")
-    CommandLineRunner commandLineRunner2(RequestParserService requestParser, RequestContentService requestContentService,
-                                         CreditBureauServiceImpl creditBureauService){
+    @Bean
+    CommandLineRunner commandLineRunner (RegPersonParser regPersonParser, VerifiedNameParser verifiedNameParser,
+                                            CreditBureauParser creditBureauParser, RequestContentService requestContentService,
+                                            SettingsService settingsService, RegPersonService regPersonService,
+                                            VerifiedNameService verifiedNameService, StopFactorCalculator stopFactorCalculator){
         return (args) -> {
             List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
-            creditBureauService.fetchCreditBureaus();
             for (RequestContent content : contentList){
-                requestParser.parseRequest(content);
+                RegPerson regPerson = regPersonParser.regPersonParse(content);
+                verifiedNameParser.verifiedNameParse(content, regPerson);
+                creditBureauParser.creditBureauParse(content, regPerson);
             }
-        };
-    }
-    @Bean(name = "cLR2")
-    CommandLineRunner commandLineRunner3(RegPersonService regPersonService, VerifiedNameService verifiedNameService,
-                                         StopFactorCalculator stopFactorCalculator, SettingsService settingsService){
-        return (args) -> {
-           Settings settings = settingsService.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
+
+            Settings settings = settingsService.initSettings(Settings.builder().distanceRatioThreshold(0.9).build());
             for (RegPerson regPerson : regPersonService.getAllRegPersons()){
                 for (VerifiedName verifiedName : verifiedNameService.getAllVerifiedNames()){
                     stopFactorCalculator.calculateStopFactor(regPerson, verifiedName, settings);

@@ -9,4 +9,5 @@ public interface RequestContentService {
 
     RequestContent createRequestContent(RequestContent requestContent);
     List<RequestContent> fetchPersonsInfo() throws IOException;
+    List<RequestContent> fetchPersonsInfoLocal() throws IOException;
 }

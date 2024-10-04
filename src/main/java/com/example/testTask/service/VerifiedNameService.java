@@ -8,4 +8,6 @@ public interface VerifiedNameService {
 
     VerifiedName initVerifiedName(VerifiedName verifiedName);
     List<VerifiedName> getAllVerifiedNames();
+    List<String> getVerifiedNameFields(VerifiedName verifiedName);
+    String verifiedNameString(VerifiedName verifiedName);
 }
