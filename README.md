@@ -1,6 +1,8 @@
 project name: "testTusk"
 
 the project was created as part of a test task.
+(need to know "https://www.baeldung.com/cs/string-similarity-edit-distance")
+
 used technology stack:
 - java 17
 - spring boot
