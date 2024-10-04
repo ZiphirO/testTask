@@ -34,13 +34,24 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
         List<String> verifiedNameCombinations = getCombinations(verifiedNameService.getVerifiedNameFields(verifiedName));
         double maxNormalizedDistance = 0.0;
 
-        for (String regPersonCombination : regPersonCombinations) {
-            for (String verifiedNameCombination : verifiedNameCombinations) {
-                int distance = levenshteinDistance(regPersonCombination, verifiedNameCombination);
-                double normalizedDistance = (double) distance / Math.max(regPersonCombination.length(), verifiedNameCombination.length());
-                maxNormalizedDistance = Math.max(maxNormalizedDistance, normalizedDistance);
+        if (regPersonCombinations.size() > verifiedNameCombinations.size()){
+            for (String regPersonCombination : regPersonCombinations) {
+                for (String verifiedNameCombination : verifiedNameCombinations) {
+                    int distance = levenshteinDistance(regPersonCombination, verifiedNameCombination);
+                    double normalizedDistance = 1 - (double)distance / Math.max(regPersonCombination.length(), verifiedNameCombination.length());
+                    maxNormalizedDistance = Math.max(maxNormalizedDistance, normalizedDistance);
+                }
+            }
+        }else {
+            for (String verifiedNameCombination  : verifiedNameCombinations) {
+                for (String regPersonCombination : regPersonCombinations) {
+                    int distance = levenshteinDistance(verifiedNameCombination, regPersonCombination);
+                    double normalizedDistance = 1 - (double) distance / Math.max(regPersonCombination.length(), verifiedNameCombination.length());
+                    maxNormalizedDistance = Math.max(maxNormalizedDistance, normalizedDistance);
+                }
             }
         }
+
         StopFactor stopFactor = new StopFactor();
 
         boolean personStopFactor = maxNormalizedDistance < distanceRatioThreshold;
@@ -96,7 +107,6 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
                 );
             }
         }
-        //System.out.print(Di[Di.length - 1]);
         return Di[Di.length - 1];
     }
     private static int min(int n1, int n2, int n3) {
