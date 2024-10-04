@@ -39,4 +39,9 @@ public class VerifiedNameServiceImpl implements VerifiedNameService {
         }
         return result;
     }
+
+    @Override
+    public String verifiedNameString(VerifiedName verifiedName) {
+        return verifiedName.getFirstName() + verifiedName.getOtherName() + verifiedName.getSurname();
+    }
 }

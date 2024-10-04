@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -31,19 +32,23 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
         Double distanceRatioThreshold = settings.getDistanceRatioThreshold();
         List<String> regPersonCombinations = getCombinations(regPersonService.getRegPersonFields(regPerson));
         List<String> verifiedNameCombinations = getCombinations(verifiedNameService.getVerifiedNameFields(verifiedName));
+        double maxNormalizedDistance = 0.0;
 
-        int maxDistance = 0;
         for (String regPersonCombination : regPersonCombinations) {
             for (String verifiedNameCombination : verifiedNameCombinations) {
                 int distance = levenshteinDistance(regPersonCombination, verifiedNameCombination);
-                maxDistance = Math.max(maxDistance, distance);
+                double normalizedDistance = (double) distance / Math.max(regPersonCombination.length(), verifiedNameCombination.length());
+                maxNormalizedDistance = Math.max(maxNormalizedDistance, normalizedDistance);
             }
         }
         StopFactor stopFactor = new StopFactor();
-        boolean personStopFactor = Double.compare((double) maxDistance, distanceRatioThreshold) == 0;
+
+        boolean personStopFactor = maxNormalizedDistance < distanceRatioThreshold;
         stopFactor.setPersonStopFactor(personStopFactor);
         stopFactor.setRegPerson(regPerson);
         stopFactorService.initStopFactor(stopFactor);
+
+        System.out.println(maxNormalizedDistance);
 
         return personStopFactor;
     }
@@ -51,10 +56,17 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
     @Override
     public  List<String> getCombinations(List<String> names) {
         List<String> combinations = new ArrayList<>();
-        for (int i = 0; i < names.size(); i++) {
-            for (int j = i + 1; j < names.size(); j++) {
-                combinations.add(names.get(i) + names.get(j));
-                combinations.add(names.get(j) + names.get(i));
+        List<String> tpm = new ArrayList<>();
+        for (String name : names){
+            if (name.contains(" ")){
+                String[] splited = name.split(" ");
+                tpm.addAll(Arrays.asList(splited));
+            }else tpm.add(name);
+        }
+        for (int i = 0; i < tpm.size(); i++) {
+            for (int j = i + 1; j < tpm.size(); j++) {
+                combinations.add(tpm.get(i) + tpm.get(j));
+                combinations.add(tpm.get(j) + tpm.get(i));
             }
         }
         return combinations;
@@ -64,22 +76,30 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
     public  int levenshteinDistance(String word1, String word2) {
         String str1 = word1.toUpperCase();
         String str2 = word2.toUpperCase();
-        int len1 = str1.length();
-        int len2 = str2.length();
+        int[] Di_1 = new int[str2.length() + 1];
+        int[] Di = new int[str2.length() + 1];
 
-        int[][] dp = new int[len1 + 1][len2 + 1];
-        for (int i = 0; i <= len1; i++) {
-            dp[i][0] = i;
+        for (int j = 0; j <= str2.length(); j++) {
+            Di[j] = j; // (i == 0)
         }
-        for (int j = 0; j <= len2; j++) {
-            dp[0][j] = j;
-        }
-        for (int i = 1; i <= len1; i++) {
-            for (int j = 1; j <= len2; j++) {
-                int cost = (Character.valueOf(str1.charAt(i - 1)).equals(Character.valueOf(str2.charAt(j - 1)))) ? 0 : 1;
-                dp[i][j] = Math.min(Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1), dp[i - 1][j - 1] + cost);
+
+        for (int i = 1; i <= str1.length(); i++) {
+            System.arraycopy(Di, 0, Di_1, 0, Di_1.length);
+
+            Di[0] = i; // (j == 0)
+            for (int j = 1; j <= str2.length(); j++) {
+                int cost = (str1.charAt(i - 1) != str2.charAt(j - 1)) ? 1 : 0;
+                Di[j] = min(
+                        Di_1[j] + 1,
+                        Di[j - 1] + 1,
+                        Di_1[j - 1] + cost
+                );
             }
         }
-        return dp[len1][len2];
+        //System.out.print(Di[Di.length - 1]);
+        return Di[Di.length - 1];
+    }
+    private static int min(int n1, int n2, int n3) {
+        return Math.min(Math.min(n1, n2), n3);
     }
 }

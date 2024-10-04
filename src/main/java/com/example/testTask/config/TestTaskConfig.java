@@ -31,7 +31,7 @@ public class TestTaskConfig {
                                             SettingsService settingsService, RegPersonService regPersonService,
                                             VerifiedNameService verifiedNameService, StopFactorCalculator stopFactorCalculator){
         return (args) -> {
-            List<RequestContent> contentList = requestContentService.fetchPersonsInfo();
+            List<RequestContent> contentList = requestContentService.fetchPersonsInfoLocal();
             for (RequestContent content : contentList){
                 RegPerson regPerson = regPersonParser.regPersonParse(content);
                 verifiedNameParser.verifiedNameParse(content, regPerson);

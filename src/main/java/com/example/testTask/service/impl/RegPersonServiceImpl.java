@@ -38,4 +38,10 @@ public class RegPersonServiceImpl implements RegPersonService {
         }
         return result;
     }
+
+    @Override
+    public String regPersonString(RegPerson regPerson) {
+        return regPerson.getFirstName() + regPerson.getMiddleName() + regPerson.getLastName();
+    }
+
 }
