@@ -61,7 +61,9 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
     }
     
     @Override
-    public  int levenshteinDistance(String str1, String str2) {
+    public  int levenshteinDistance(String word1, String word2) {
+        String str1 = word1.toUpperCase();
+        String str2 = word2.toUpperCase();
         int len1 = str1.length();
         int len2 = str2.length();
 
@@ -74,7 +76,7 @@ public class StopFactorCalculatorImpl implements StopFactorCalculator {
         }
         for (int i = 1; i <= len1; i++) {
             for (int j = 1; j <= len2; j++) {
-                int cost = (str1.charAt(i - 1) == str2.charAt(j - 1)) ? 0 : 1;
+                int cost = (Character.valueOf(str1.charAt(i - 1)).equals(Character.valueOf(str2.charAt(j - 1)))) ? 0 : 1;
                 dp[i][j] = Math.min(Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1), dp[i - 1][j - 1] + cost);
             }
         }

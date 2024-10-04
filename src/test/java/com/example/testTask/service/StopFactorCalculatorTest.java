@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class StopFactorCalculatorTest {
 
@@ -78,6 +79,7 @@ class StopFactorCalculatorTest {
     public void testSameStrings() {
         StopFactorCalculatorImpl stopFactorCalculator = new StopFactorCalculatorImpl();
         assertEquals(0, stopFactorCalculator.levenshteinDistance("test", "test"));
+        assertNotEquals(0.9, stopFactorCalculator.levenshteinDistance("TEST", "test"));
     }
 
     @Test
